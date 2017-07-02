@@ -1,7 +1,7 @@
 # Cakepdf
 
-Convert HTML to PDF plugin for CakePHP 2.x.
-This plugin could not be made without awesome library [Snappy](https://github.com/KnpLabs/snappy).
+Convert HTML to PDF plugin for CakePHP 2.x.  
+This plugin could not be made without awesome library [Snappy](https://github.com/KnpLabs/snappy).  
 Thankful to the authors of library Snappy.
 
 ## Installation
@@ -31,7 +31,7 @@ $Pdf = new Pdf();
 $html = '<p>Long html for long pdf</p>';
 $Pdf->add($html);
 
-// Add html as a seperated pdf page.
+// Add each html as a seperated pdf page.
 $page = '<p>Page</p>';
 $Pdf->addPage($page)
     ->addPage($page);
