@@ -42,7 +42,7 @@ class Pdf {
     protected $pageContainer = '<div class="page-container">%s</div>';
     
     public function __construct() {
-        $this->setBinary();
+        $this->_setBinary();
         $this->Snappy = new \Knp\Snappy\Pdf($this->binary);
     }
     
@@ -128,7 +128,7 @@ class Pdf {
      * @param   string: path of current script
      * @return  string: path of root
      */
-    protected function findRoot($root) {
+    protected function _findRoot($root) {
         do {
             $lastRoot = $root;
             $root = dirname($root);
@@ -148,7 +148,7 @@ class Pdf {
      * @param   void
      * @return  string: path of binary
      */
-    protected function setBinary() {
+    protected function _setBinary() {
         $is32bit = PHP_INT_SIZE === 4;
         if ($is32bit) {
             $binary = 'wkhtmltopdf-i386';
@@ -156,10 +156,14 @@ class Pdf {
             $binary = 'wkhtmltopdf-amd64';
         }
         
-        $root = $this->findRoot(__FILE__);
-        $this->binary = implode(DIRECTORY_SEPARATOR, array(
+        $root = $this->_findRoot(__FILE__);
+        $binary = implode(DIRECTORY_SEPARATOR, array(
             $root, $this->vendor, 'bin', $binary
         ));
+        
+        if (is_file($binary) || is_link($binary)) {
+            $this->binary = $binary;
+        }
         
         return $this->binary;
     }
