@@ -36,6 +36,13 @@ class PdfTest extends TestCase {
         $this->assertEquals($Snappy, $this->Pdf->getSnappy());
     }
     
+    public function testOuput() {
+        $this->Pdf->add('<p>Test</p>');
+        $this->Pdf->output($this->output);
+        $this->Pdf->render();
+        $this->assertEquals(true, is_file($this->output));
+    }
+    
     public function testGenerateFileByAdd() {
         $this->Pdf->add('<p>Test</p>');
         $this->Pdf->render($this->output);

@@ -99,7 +99,9 @@ class Pdf {
      * @return  string|null: pdf content or null if output to file
      */
     public function render($output = null, $options = array(), $overwrite = false) {
-        $this->output($output);
+        if ($output !== null) {
+            $this->output($output);
+        }
         if (empty($this->output)) {
             return $this->Snappy->getOutputFromHtml($this->html, $options);
         } else {
