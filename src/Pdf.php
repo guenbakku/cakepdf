@@ -93,14 +93,17 @@ class Pdf {
      * Render pdf from added html
      *
      * @param   string: output path
-     * @return  string/null: pdf content or null if output to file
+     * @param   array: an array of options for this generation only
+     * @param   bool: overwrite existing file or not. 
+     *                Only take effect if output is not null
+     * @return  string|null: pdf content or null if output to file
      */
-    public function render($output = null) {
+    public function render($output = null, $options = array(), $overwrite = false) {
         $this->output($output);
         if (empty($this->output)) {
-            return $this->Snappy->getOutputFromHtml($this->html);
+            return $this->Snappy->getOutputFromHtml($this->html, $options);
         } else {
-            return $this->Snappy->generateFromHtml($this->html, $this->output);
+            return $this->Snappy->generateFromHtml($this->html, $this->output, $options, $overwrite);
         }
     }
     
