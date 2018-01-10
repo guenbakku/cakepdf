@@ -6,24 +6,35 @@
  * has been installed as a dependency of the plugin, or the plugin is itself
  * installed as a dependency of an application.
  */
-$findRoot = function ($root) {
+$findRoot = function ($root, $vendor) {
     do {
         $lastRoot = $root;
         $root = dirname($root);
-        if (is_dir($root . '/vendors')) {
+        if (is_dir($root.'/'.$vendor)) {
             return $root;
         }
     } while ($root !== $lastRoot);
 
-    throw new Exception("Cannot find the root of the application, unable to run tests");
+    return null;
 };
-$root = $findRoot(__FILE__);
+
+foreach (array('vendor', 'vendors') as $vendor) {
+    $root = $findRoot(__FILE__, $vendor);
+    if (!empty($root)) {
+        break;
+    }
+}
+if (empty($root)) {
+    throw new Exception("Cannot find the root of the application, unable to run tests");
+}
 unset($findRoot);
 
 chdir($root);
-require $root . '/vendors/autoload.php';
 
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
 define('ROOT', $root);
+define('VENDOR', ROOT.DS.$vendor);
+
+require VENDOR.DS.'autoload.php';
