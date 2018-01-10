@@ -1,6 +1,7 @@
 # Cakepdf
 
-Convert HTML to PDF plugin for CakePHP 2.x.  
+CakePHP plugin for converting HTML to PDF.  
+This plugin is compatible with CakePHP 2.x and CakePHP 3.x.  
 This plugin could not be made without awesome library [Snappy](https://github.com/KnpLabs/snappy).  
 Thankful to the authors of library Snappy.
 

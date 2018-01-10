@@ -1,6 +1,6 @@
 {
     "name": "guenbakku/cakepdf",
-    "description": "Convert HTML to PDF plugin for CakePHP 2.x",
+    "description": "CakePHP plugin for converting HTML to PDF",
     "type": "library",
     "license": "MIT",
     "authors": [
