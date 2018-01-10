@@ -49,12 +49,18 @@ class PdfTest extends TestCase {
         $Pdf = new Pdf('xxx');
     }
     
-    public function testOuput() {
+    public function testSetOuput() {
         $Pdf = new Pdf();
         $Pdf->add('<p>Test</p>');
-        $Pdf->output($this->output);
+        $Pdf->setOutput($this->output);
         $Pdf->render();
         $this->assertEquals(true, is_file($this->output));
+    }
+
+    public function testGetOutput() {
+        $Pdf = new Pdf();
+        $Pdf->setOutput($this->output);
+        $this->assertEquals($this->output, $Pdf->getOutput());
     }
     
     public function testGenerateFileByAdd() {

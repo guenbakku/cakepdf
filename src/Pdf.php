@@ -48,14 +48,24 @@ class Pdf {
     }
     
     /**
-     * Set output path for pdf file
+     * Set output path of pdf file
      *
      * @param   string: output path
      * @return  object: this object
      */
-    public function output($path) {
+    public function setOutput($path) {
         $this->output = $path;
         return $this;
+    }
+
+    /**
+     * Get output path of pdf file
+     *
+     * @param   void
+     * @return  string
+     */
+    public function getOutput() {
+        return $this->output;
     }
 
     /**
@@ -101,12 +111,12 @@ class Pdf {
      */
     public function render($output = null, $options = array(), $overwrite = false) {
         if ($output !== null) {
-            $this->output($output);
+            $this->setOutput($output);
         }
-        if (empty($this->output)) {
+        if (empty($this->getOutput())) {
             return $this->Snappy->getOutputFromHtml($this->html, $options);
         } else {
-            return $this->Snappy->generateFromHtml($this->html, $this->output, $options, $overwrite);
+            return $this->Snappy->generateFromHtml($this->html, $this->getOutput(), $options, $overwrite);
         }
     }
     
