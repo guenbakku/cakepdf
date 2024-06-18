@@ -1,2 +1,3 @@
-/vendors/*
-/tests/Coverage/*
+/vendors
+/vendor
+/tests/Coverage

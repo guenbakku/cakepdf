@@ -22,8 +22,5 @@
         "psr-4": {
             "Guenbakku\\Cakepdf\\": "src"
         }
-    },
-    "config": {
-		"vendor-dir": "vendors/"
-	}
+    }
 }
