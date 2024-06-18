@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  php:
+    build: ./.docker/php
+    image: php:7.2-apache-cakephp3
+    container_name: cakepdf
+    volumes:
+      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./.docker/php/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./:/var/www/html
+    ports:
+      - 8080:80
