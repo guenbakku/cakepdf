@@ -4,20 +4,22 @@ use PHPUnit\Framework\TestCase;
 use Guenbakku\Cakepdf\Pdf;
 
 class PdfTest extends TestCase {
-        
+
+    protected $output;
+
     public function setUp() {
         $this->output = dirname(__FILE__)."/pdfTest.pdf";
         if (is_file($this->output)) {
             unlink($this->output);
         }
     }
-    
+
     public function tearDown() {
         if (is_file($this->output)) {
             unlink($this->output);
         }
     }
-    
+
     public function testInstanceSnappy() {
         $Pdf = new Pdf();
 
@@ -27,18 +29,18 @@ class PdfTest extends TestCase {
         } else {
             $binary = 'wkhtmltopdf-amd64';
         }
-        
+
         $binary = implode(DS, array(
             VENDOR, 'bin', $binary
         ));
-        
+
         $Snappy = new Knp\Snappy\Pdf($binary);
-        
+
         $this->assertEquals($Snappy, $Pdf->getSnappy());
     }
 
     public function testSetVendorManually() {
-        $Pdf = new Pdf('vendors');
+        $Pdf = new Pdf('vendor');
         $this->assertEquals(true, $Pdf instanceof Pdf);
     }
 
@@ -48,7 +50,7 @@ class PdfTest extends TestCase {
     public function testNotFoundVendorFullPath() {
         $Pdf = new Pdf('xxx');
     }
-    
+
     public function testSetOuput() {
         $Pdf = new Pdf();
         $Pdf->add('<p>Test</p>');
@@ -62,14 +64,14 @@ class PdfTest extends TestCase {
         $Pdf->setOutput($this->output);
         $this->assertEquals($this->output, $Pdf->getOutput());
     }
-    
+
     public function testGenerateFileByAdd() {
         $Pdf = new Pdf();
         $Pdf->add('<p>Test</p>');
         $Pdf->render($this->output);
         $this->assertEquals(true, is_file($this->output));
     }
-    
+
     public function testGenerateFileByAddPage() {
         $Pdf = new Pdf();
         $Pdf->add('<p>Test1</p>', true);
@@ -77,14 +79,14 @@ class PdfTest extends TestCase {
         $Pdf->render($this->output);
         $this->assertEquals(true, is_file($this->output));
     }
-    
+
     public function testOutputByAdd() {
         $Pdf = new Pdf();
         $Pdf->add('<p>Test</p>');
         $result = $Pdf->render();
         $this->assertEquals(true, !is_null($result));
     }
-    
+
     public function testOutputByAddPage() {
         $Pdf = new Pdf();
         $Pdf->addPage('<p>Test1</p>');
@@ -92,7 +94,7 @@ class PdfTest extends TestCase {
         $result = $Pdf->render();
         $this->assertEquals(true, !is_null($result));
     }
-    
+
     public function testMagicCall() {
         $Pdf = new Pdf();
         $Pdf->setOption('orientation', 'Landscape');
