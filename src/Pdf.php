@@ -1,9 +1,8 @@
 <?php
 /**
- * CakePHP plugin for converting HTML to PDF.
- * This plugin could not be made without awesome library "Knp\Snappy\Pdf".
- * Thankful to the authors of library Snappy.
- * 
+ * Easily generate PDFs from your HTML content.
+ * This is a simple wrapper of awesome library "Knp\Snappy\Pdf".
+ *
  * @copyright   NVB
  * @license     http://www.opensource.org/licenses/mit-license.php MIT License
  */
@@ -12,21 +11,36 @@ namespace Guenbakku\Cakepdf;
 use RuntimeException;
 
 class Pdf {
-    // Path to vendor's folder
+    /**
+     * Path to vendor's folder
+     * @var string[]
+     */
     protected $vendor;
-    
-    // Snappy object
-    protected $Snappy;
-    
-    // Path of wkhtmltopdf executable binary
+
+    /**
+     * Snappy object
+     * @var \Knp\Snappy\Pdf
+     */
+    protected $snappy;
+
+    /**
+     * Path of wkhtmltopdf executable binary
+     * @var string
+     */
     protected $binary;
-    
-    // Html that will be rendered to pdf
+
+    /**
+     * Html that will be rendered to pdf
+     * @var string
+     */
     protected $html;
-    
-    // Path of output pdf
+
+    /**
+     * Path of output pdf
+     * @var string
+     */
     protected $output;
-    
+
     protected $pageStyle = '
         <style type="text/css">
             .page-container {
@@ -38,22 +52,25 @@ class Pdf {
                 page-break-after: auto;
             }
         </style>';
-    
+
     protected $pageContainer = '<div class="page-container">%s</div>';
-    
-    public function __construct($vendor = array('vendor', 'vendors')) {
+
+    /**
+     * @param string[]|string $vendor
+     */
+    public function __construct($vendor = ['vendor', 'vendors']) {
         $this->_setVendor($vendor);
         $this->_setBinary();
-        $this->Snappy = new \Knp\Snappy\Pdf($this->binary);
+        $this->snappy = new \Knp\Snappy\Pdf($this->binary);
     }
-    
+
     /**
      * Set output path of pdf file
      *
-     * @param   string: output path
-     * @return  object: this object
+     * @param string $path path of output file
+     * @return Pdf this object
      */
-    public function setOutput($path) {
+    public function setOutput(string $path): Pdf {
         $this->output = $path;
         return $this;
     }
@@ -61,20 +78,19 @@ class Pdf {
     /**
      * Get output path of pdf file
      *
-     * @param   void
-     * @return  string
+     * @return string
      */
-    public function getOutput() {
+    public function getOutput(): ?string {
         return $this->output;
     }
 
     /**
-     * Add html as seperated pdf page
+     * Add html as separated pdf page
      *
-     * @param   string: html
-     * @return  object: this object
+     * @param string $html html string of a page
+     * @return Pdf this object
      */
-    public function addPage($html) {
+    public function addPage(string $html): Pdf {
         $page = sprintf($this->pageContainer, $html);
         if (strpos($this->html, $this->pageStyle) === false) {
             $this->html .= $this->pageStyle . $page;
@@ -87,11 +103,11 @@ class Pdf {
     /**
      * Add html to generate pdf
      *
-     * @param   string: html
-     * @param   bool: add as seperated page or not
-     * @return  object: this object
+     * @param string $html html string
+     * @param bool $breakPage add as separated page or not
+     * @return Pdf this object
      */
-    public function add($html, $breakPage = false) {
+    public function add(string $html, bool $breakPage = false): Pdf {
         if ($breakPage === false) {
             $this->html .= $html;
         } else {
@@ -99,52 +115,49 @@ class Pdf {
         }
         return $this;
     }
-    
+
     /**
      * Render pdf from added html
      *
-     * @param   string: output path
-     * @param   array: an array of options for this generation only
-     * @param   bool: overwrite existing file or not. 
-     *                Only take effect if output is not null
-     * @return  string|null: pdf content or null if output to file
+     * @param string $output path of output file
+     * @param array $options an array of options for this generation only
+     * @param bool $overwrite overwrite existing file or not. Only take effect if output is not null
+     * @return string|null pdf content or null if output to file
      */
-    public function render($output = null, $options = array(), $overwrite = false) {
+    public function render(?string $output = null, array $options = [], bool $overwrite = false) {
         if ($output !== null) {
             $this->setOutput($output);
         }
         if (empty($this->getOutput())) {
-            return $this->Snappy->getOutputFromHtml($this->html, $options);
+            return $this->snappy->getOutputFromHtml($this->html, $options);
         } else {
-            return $this->Snappy->generateFromHtml($this->html, $this->getOutput(), $options, $overwrite);
+            return $this->snappy->generateFromHtml($this->html, $this->getOutput(), $options, $overwrite);
         }
     }
-    
+
     /**
      * Return Snappy object
      *
-     * @param   void
-     * @return  object: Snappy object
+     * @return  object Snappy object
      */
-    public function getSnappy() {
-        return $this->Snappy;
+    public function getSnappy(): \Knp\Snappy\Pdf {
+        return $this->snappy;
     }
-    
+
     /**
      * This magic is used for calling methods of Snappy object
      */
     public function __call($name, $arguments) {
-        $this->Snappy->$name(...$arguments);
+        $this->snappy->$name(...$arguments);
         return $this;
     }
-    
+
     /**
      * Find root of application
      *
-     * @param   string: path of current script
-     * @return  string: path of root
+     * @return string path of root
      */
-    protected function _findVendorFullPath() {
+    protected function _findVendorFullPath(): string {
         $findRoot = function ($vendor) {
             $root = __FILE__;
             do {
@@ -154,10 +167,10 @@ class Pdf {
                     return $root;
                 }
             } while ($root !== $lastRoot);
-            
+
             return null;
         };
-        
+
         foreach ($this->vendor as $vendor) {
             $root = $findRoot($vendor);
             if (!empty($root)) {
@@ -166,49 +179,48 @@ class Pdf {
                 ));
             }
         }
-        
+
         throw new RuntimeException('Cannot find the root of the application');
     }
 
     /**
      * Set path to vendor's folder
      *
-     * @param   string|array: path(s) to vendor's folder
-     * @return  object: this object
+     * @param string[]|string $vendor path(s) of vendor's folder
+     * @return Pdf this object
      */
-    protected function _setVendor($vendor) {
+    protected function _setVendor($vendor): Pdf {
         if (!is_array($vendor)) {
             $vendor = array($vendor);
         }
         $this->vendor = $vendor;
         return $this;
     }
-    
+
     /**
      * Set path of wkhtmltopdf.
-     * This will set the correct wkhtmltopdf binary 
+     * This will set the correct wkhtmltopdf binary
      * corresponding to structure of current processor (32 or 64 bit)
      *
-     * @param   void
-     * @return  string: path of binary
+     * @return string path of binary
      */
-    protected function _setBinary() {
+    protected function _setBinary(): string {
         $is32bit = PHP_INT_SIZE === 4;
         if ($is32bit) {
             $binary = 'wkhtmltopdf-i386';
         } else {
             $binary = 'wkhtmltopdf-amd64';
         }
-        
+
         $vendorFullPath = $this->_findVendorFullPath();
         $binary = implode(DIRECTORY_SEPARATOR, array(
             $vendorFullPath, 'bin', $binary
         ));
-        
+
         if (is_file($binary) || is_link($binary)) {
             $this->binary = $binary;
         }
-        
+
         return $this->binary;
     }
 }
