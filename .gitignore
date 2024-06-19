@@ -1,3 +1,4 @@
 /vendors
 /vendor
 /tests/Coverage
+.phpunit.result.cache

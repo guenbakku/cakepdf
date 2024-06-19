@@ -7,14 +7,14 @@ class PdfTest extends TestCase {
 
     protected $output;
 
-    public function setUp() {
+    public function setUp(): void {
         $this->output = dirname(__FILE__)."/pdfTest.pdf";
         if (is_file($this->output)) {
             unlink($this->output);
         }
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         if (is_file($this->output)) {
             unlink($this->output);
         }
@@ -44,11 +44,9 @@ class PdfTest extends TestCase {
         $this->assertEquals(true, $Pdf instanceof Pdf);
     }
 
-    /**
-     * @expectedException   RuntimeException
-     */
     public function testNotFoundVendorFullPath() {
-        $Pdf = new Pdf('xxx');
+        $this->expectException(RuntimeException::class);
+        new Pdf('xxx');
     }
 
     public function testSetOuput() {
