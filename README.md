@@ -1,9 +1,14 @@
 # Cakepdf
 
-CakePHP plugin for converting HTML to PDF.  
-This plugin is compatible with CakePHP 2.x and CakePHP 3.x.  
-This plugin could not be made without awesome library [Snappy](https://github.com/KnpLabs/snappy).  
-Thankful to the authors of library Snappy.
+Easily generate PDFs from your HTML content.
+
+This versatile tool can be used as:
+
+* A CakePHP plugin: Seamlessly integrate PDF generation into your CakePHP 2.x and above applications.  
+* A standalone library: Use it independently outside of CakePHP for maximum flexibility.  
+
+Powered by Snappy (https://github.com/KnpLabs/snappy)  
+I want to give a big thanks to the creators of the fantastic Snappy library, which makes this functionality possible.
 
 ## Installation
 
@@ -25,31 +30,31 @@ use Guenbakku\Cakepdf\Pdf;
 // wkhtmltopdf binary which is installed as composer dependencies. 
 // So following setup also automatically set wkhtmltopdf binary's path 
 // corresponding to current processor's structure (32 or 64 bit).
-$Pdf = new Pdf();
+$pdf = new Pdf();
 
 // Add html to render to pdf.
 // Break page will be inserted automatically by wkhtmltopdf.
 $html = '<p>Long html for long pdf</p>';
-$Pdf->add($html);
+$pdf->add($html);
 
 // Add each html as a seperated pdf page.
 $page = '<p>Page</p>';
-$Pdf->addPage($page)
+$pdf->addPage($page)
     ->addPage($page);
 
 // Render output to display in browser.
 header('Content-Type: application/pdf');
 header('Content-Disposition: inline; filename="file.pdf"');
-$result = $Pdf->render();
+$result = $pdf->render();
 echo $result;
 
 // Or render output to pdf file.
 $output = '/tmp/cakepdf.pdf';
-$Pdf->render($output);
+$pdf->render($output);
 
 // Set options for wkhtmltopdf.
 // Basically same with Snappy's interface.
-$Pdf = new Pdf();
-$Pdf->setOption('page-size', 'A4')
+$pdf = new Pdf();
+$pdf->setOption('page-size', 'A4')
     ->setOption('orientation', 'Landscape');
 ```
