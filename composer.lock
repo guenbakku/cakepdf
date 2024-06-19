@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2de592395a553ab500805fc45eee7a4f",
+    "content-hash": "427e402e20adbe91c6562bce5625e845",
     "packages": [
         {
             "name": "h4cc/wkhtmltopdf-amd64",
@@ -1714,7 +1714,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6"
+        "php": "^7.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
